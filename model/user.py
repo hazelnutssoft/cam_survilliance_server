@@ -37,10 +37,10 @@ class User(Model):
                   }))
     vali_password = validators.String(not_empty = True,
                                  messages = {'empty': u'忘记设置密码了'})
-    vali_items = {'email':vali_email,'name':vali_name,'password':vali_password}
+    vali_items = {'email': vali_email, 'name': vali_name, 'password': vali_password}
 
     def validate(self):
-        for k, vali in vali_items.items():
+        for k, vali in self.vali_items.items():
             try:
                 vali.to_python(self[k])
             except formencode.Invalid, e:
@@ -52,7 +52,7 @@ class User(Model):
 
     def create(self):
         self.created_at = time.time()
-        if not validate():
+        if not self.validate():
             return
         if User.find_first('where email = ?', self.email):
             self.errors = {'email': u'此email已被占用'}

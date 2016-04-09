@@ -252,6 +252,18 @@ class Model(dict):
         L = db.select('select * from `%s`' % cls.__table__)
         return [cls(**d) for d in L]
 
+    # need to change!!!!
+    #@classmethod
+    #def find_item_by(cls, item, where, *args):
+    #    L = db.select('select %s from `%s` %s' % (item, cls.__table__, where), *args)
+    #    return [cls(**d) for d in L]
+
+    # need to change!!!!
+    #@classmethod
+    #def find_first_item_by(cls, item, where, *args):
+    #    d = db.select_one('select %s from `%s` %s' % (item, cls.__table__, where), *args)
+    #    return cls(**d) if d else None
+
     @classmethod
     def find_by(cls, where, *args):
         '''

@@ -2,14 +2,33 @@ from base import base_handler
 import tcelery
 import tasks
 import tornado
+from model.user import User
+from tornado.options import options
 
 tcelery.setup_nonblocking_producer()
 
 class register_handler(base_handler):
     def get(self):
-        pass
+        return self.render('register.html')
     def post(self):
-        pass
+        email = self.get_argument('email','')
+        user_name = self.get_argument('user_name','')
+        password = self.get_argument('password','')
+        password_confirm = self.get_argument('password_confirm','')
+
+        user = User()
+        user.email = email
+        user.name = user_name
+        user.password = password
+        user.password_confirm = password_confirm
+        user_id = user.create()
+        if not user_id:
+            return self.render('/register', user=user)
+            #return self.send_error_json(user.errors)
+        else:
+            self.redirect('/login')
+
+
 
 class login_handler(base_handler):
     def get(self):

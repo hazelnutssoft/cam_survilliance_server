@@ -2,6 +2,17 @@ __auther__= "guo xiao"
 
 from marcos import *
 from hashlib import sha1
+import os
+import md5
+
+def getPWDDir():
+    return os.getcwd()
+
+def get_md5(raw_str):
+    mdtool = md5.new()
+    mdtool.update(raw_str)
+    return mdtool.hexdigest()
+
 
 def hash_password(password):
     return sha1('{password}{salt}'.format(

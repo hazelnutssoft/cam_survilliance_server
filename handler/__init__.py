@@ -5,3 +5,4 @@ from handler.browser import *
 from handler.home import *
 from handler.setting import *
 from handler.user import *
+from handler.api import *
