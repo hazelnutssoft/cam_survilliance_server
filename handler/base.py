@@ -21,7 +21,7 @@ class base_handler(tornado.web.RequestHandler):
         if not user_id:
             return None
         import model
-        u = model.user.User().find_first("id = ?", user_id)
+        u = model.user.User().find_first("where id = ?", user_id)
         if not u:
             return None
         return u

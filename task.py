@@ -1,6 +1,6 @@
 # coding=utf-8
 import os,sys
-from celery import Celery,platforms
+#from celery import Celery,platforms
 import json
 import time
 from model import user
@@ -10,24 +10,25 @@ from model.image import Image
 from model.device_observed import Device_Observed
 from util import getPWDDir
 from util.marcos import *
+from util import hash_password
 
-reload(sys)
-sys.setdefaultencoding( "utf-8" )
+#reload(sys)
+#sys.setdefaultencoding( "utf-8" )
 
-celery = Celery("tasks", broker="amqp://")
-celery.conf.CELERY_RESULT_BACKEND = os.environ.get('CELERY_RESULT_BACKEND', 'amqp')
+#celery = Celery("tasks", broker="amqp://")
+#celery.conf.CELERY_RESULT_BACKEND = os.environ.get('CELERY_RESULT_BACKEND', 'amqp')
 
-platforms.C_FORCE_ROOT = True
+#platforms.C_FORCE_ROOT = True
 
-@celery.task(name='handler.tasks.user_login')
+#@celery.task(name='handler.tasks.user_login')
 def user_login(username, password):
-    u = user.User.find_first('where name = ? and password = ?', username, password)
+    u = user.User.find_first('where name = ? and password = ?', username, hash_password(password))
     if u:
         return u.id
     else:
         return None
 
-@celery.task(name='handler.tasks.img_upload')
+#@celery.task(name='handler.tasks.img_upload')
 def img_upload(device_mac, device_pos, meta):
     if device_mac == "":
         return False
@@ -41,6 +42,8 @@ def img_upload(device_mac, device_pos, meta):
 
     upload_path = os.path.join(getPWDDir(), CAPTURED_DIR)
     filename = meta['filename']
+    filename = os.path.basename(filename)
+    print filename,'----',upload_path
     filepath = os.path.join(upload_path, filename)
     with open(filepath, 'wb') as up:
         up.write(meta['body'])
@@ -52,7 +55,7 @@ def img_upload(device_mac, device_pos, meta):
         return False
     return True
 
-@celery.task(name='handler.tasks.get_summery_info')
+#@celery.task(name='handler.tasks.get_summery_info')
 def get_summery_info(user):
     dev_observed = Device_Observed()
     res = {'user_name': user.name, 'device_counts': dev_observed.count_user_devices(user.id), 'device_info': []}

@@ -1,15 +1,24 @@
+# coding=utf-8
 from base import base_handler
-import tcelery
-import tasks
+#import tcelery
+import task
 import tornado
 from model.user import User
 from tornado.options import options
+import sys
+reload(sys)
+sys.setdefaultencoding('utf-8')
 
-tcelery.setup_nonblocking_producer()
+#tcelery.setup_nonblocking_producer()
 
 class register_handler(base_handler):
     def get(self):
-        return self.render('register.html')
+        user = User()
+        user.email = ""
+        user.password = ""
+        user.name=""
+        user.password_confirm = ""
+        return self.render('register.html', user_name="", user=user, errors={})
     def post(self):
         email = self.get_argument('email','')
         user_name = self.get_argument('user_name','')
@@ -23,7 +32,7 @@ class register_handler(base_handler):
         user.password_confirm = password_confirm
         user_id = user.create()
         if not user_id:
-            return self.render('/register', user=user)
+            return self.render('register.html', user_name="", user=user, errors=user.errors)
             #return self.send_error_json(user.errors)
         else:
             self.redirect('/login')
@@ -36,7 +45,8 @@ class login_handler(base_handler):
                     username_warning='',
                     password_warning='',
                     login_warning='',
-                    page_name='login')
+                    page_name='login',
+                    user_name="")
 
     @tornado.web.asynchronous
     def post(self):
@@ -56,13 +66,16 @@ class login_handler(base_handler):
                         login_warning = '',
                         page_name = 'login')
             else:
-                tasks.user_login.apply_async(args=[username, password], callback=self.on_login_success)
+                res = task.user_login(username, password)
+                self.on_login_success(res)
 
     def on_login_success(self, resp):
-        if resp.result:
-            user_id = resp.result
-            self.set_secure_cookie('u_u', u'{0}'.format(user_id),domain='.{0}'.format(options.www_domain))
+        if resp:
+            user_id = resp
+            print 'id',user_id
+            self.set_secure_cookie('u_u', str(user_id))
             return_url = self.get_argument('return', '/')
+            print "url",return_url
             self.redirect(return_url)
         else:
             self.render('login.html',
@@ -75,5 +88,5 @@ class login_handler(base_handler):
 class logout_handler(base_handler):
     @tornado.web.authenticated
     def get(self):
-        self.clear_cookie('u_u', domain='.{0}'.format(options.www_domain))
+        self.clear_cookie('u_u')
         return self.redirect('/')

@@ -1,4 +1,5 @@
 from base import base_handler
+import tornado
 from model.device_observed import Device_Observed
 from model.device import Device
 from model.position import Position
@@ -16,12 +17,12 @@ class browser_handler(base_handler):
         image = Image()
         devices = device_observed.observed_devices(usr.id)
         if not devices or len(devices) < 1:
-            return self.render('no_devices.html', user_name=usr.name)
+            return self.render('no_devices.html', user_name=usr.name, page_name="browser")
 
         positions = []
         for dev in devices:
             positions.extend(position.get_position_by_device_id(dev.id))
-        current_position_id = self.get_argument('position_id', '')
+            current_position_id = self.get_argument('position_id', '')
         current_page = self.get_argument('page', '')
         if current_page:
             current_page = int(current_page)

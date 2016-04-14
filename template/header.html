@@ -2,14 +2,12 @@
     <div id="navbar-header">
         <a class="navbar-brand" href="/" onclick="activeMenuItem('home')">物候监测系统</a>
     </div>
-    <div>
+        {%if user_name%}
         <ul class="nav navbar-nav" id="menu">
-            <li id="preview" class="{% if page_name == 'preview'%}active{%end%}">
-                <a href="/preview" >图像预览</a>
+            <li id="browser" class="{% if page_name == 'browser'%}active{%end%}">
+                <a href="/browser" >图像预览</a>
             </li>
-        </ul>
-        <ul class="nav navbar-nav navbar-right">
-            <li class="dropdown">
+            <li class="dropdown nav-right">
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">{{user_name}} <span class="caret"></span></a>
                 <ul class="dropdown-menu">
                     <li><a href="/">我的主页</a></li>
@@ -17,7 +15,6 @@
                     <li><a href="/logout">退出</a> </li>
                 </ul>
             </li>
-
-        </ul>
-    </div>
+	</ul>
+        {%end%}
 </div>

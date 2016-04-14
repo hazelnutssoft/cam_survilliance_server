@@ -3,14 +3,14 @@ __author__ = 'guoxiao'
 from base import base_handler
 import os
 
-import tcelery
-import tasks
+#import tcelery
+import task
 from model.device import Device
 from model.position import Position
 from model.device_observed import Device_Observed
 from util import get_md5
 
-tcelery.setup_nonblocking_producer()
+#tcelery.setup_nonblocking_producer()
 
 
 class image_handler(base_handler):
@@ -22,10 +22,11 @@ class image_handler(base_handler):
             device_mac = self.get_argument('mac', '')
             device_pos = self.get_argument('pos', '')
             meta = file_metas[0]
-            tasks.img_upload.apply_async(args=[device_mac, device_pos, meta], callback=self.on_upload_success)
+            res = task.img_upload(device_mac, device_pos, meta)
+            self.on_upload_success(res)
 
     def on_upload_success(self, resp):
-        if resp.result:
+        if resp:
             self.write('ok')
         else:
             self.write('fail')
@@ -49,10 +50,11 @@ class observer_handler(base_handler):
         self.observed = self.get_argument('observed',False)
         user_name = self.get_argument('user_name','')
         user_password = self.get_argument('user_password','')
-        tasks.user_login.apply_async(args = [user_name, user_password], callback = self.on_login_success)
+        res = task.user_login(user_name, user_password)
+        self.on_login_success(res)
 
     def on_login_success(self, resp):
-        if resp.result:
+        if resp:
             dev_observed = Device_Observed()
             if self.observed:
                 dev_observed.observe(resp.result, self.device_id)

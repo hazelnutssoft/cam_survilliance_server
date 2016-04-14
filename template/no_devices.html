@@ -1,10 +1,12 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title></title>
-</head>
-<body>
+{%extends "base.html" %}
 
-</body>
-</html>
+{%block title%}主页-{{user_name}}{%end%}
+
+{%block content%}
+<h1>欢迎您，{{user_name}}</h1>
+
+    <div>
+        <h2>您还没有关联设备，请通过终端关联</h2>
+    </div>
+
+{%end%}

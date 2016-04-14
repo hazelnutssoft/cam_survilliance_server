@@ -21,6 +21,11 @@
 {%end%}
 
 {%block content%}
+    <ol class="breadcrumb">
+        {%for pos in positions%}
+        <li><a href="/browser?position_id={{pos.id}}">摄像机编号{{pos.position}}</a></li>
+        {%end%}
+    </ol>
     <div class="panel panel-default">
         <div class="panel-body">
             {%for img in images %}

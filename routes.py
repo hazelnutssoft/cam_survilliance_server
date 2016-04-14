@@ -11,6 +11,7 @@ handlers = [
     (r'/api/position', position_handler),
     (r'/api/device', device_handler),
     (r'/api/observer', observer_handler),
+    (r'/register', register_handler),
     (r'/login', login_handler),
     (r'/logout', logout_handler)
 ]

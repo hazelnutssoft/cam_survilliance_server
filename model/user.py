@@ -1,5 +1,5 @@
-#!/usr/bin/env python
-# -*- coding: utf-8 -*-
+#coding=utf-8
+import transwarp.db
 from transwarp.db import next_id
 from transwarp.orm import Model, StringField, BooleanField, FloatField, TextField, IntegerField
 import time
@@ -16,7 +16,6 @@ class User(Model):
     permission = IntegerField()
     name = StringField(ddl='varchar(50)')
     created_at = FloatField(updatable=False, default=time.time)
-
 
     vali_email = validators.Email(not_empty = True,
                                     strip = True,
@@ -40,11 +39,12 @@ class User(Model):
     vali_items = {'email': vali_email, 'name': vali_name, 'password': vali_password}
 
     def validate(self):
+        self.errors = {}
         for k, vali in self.vali_items.items():
             try:
                 vali.to_python(self[k])
-            except formencode.Invalid, e:
-                self.errors[k] = e.error_dict[k]
+            except formencode.Invalid as e:
+                self.errors[k] = e
 
         if self.errors:
             return False
