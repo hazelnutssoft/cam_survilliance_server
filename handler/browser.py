@@ -1,5 +1,6 @@
 from base import base_handler
 import tornado
+import time
 from model.device_observed import Device_Observed
 from model.device import Device
 from model.position import Position
@@ -46,7 +47,8 @@ class browser_handler(base_handler):
         images = image.find_by('order by id desc limit ? offset ?',
                                IMAGE_NUMBER_FOR_PAGE,
                                (current_page - 1)*IMAGE_NUMBER_FOR_PAGE)
-
+        for img in images:
+            img.created_at = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(img.created_at))
         # get the start and end page num
         if current_page > 3:
             start_page_num = current_page-3
