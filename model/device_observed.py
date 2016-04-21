@@ -5,13 +5,14 @@ __author__ = 'guoxiao'
 from transwarp.db import next_id
 from transwarp.orm import Model, StringField, BooleanField, FloatField, TextField, IntegerField
 import time
+from device import Device
 
 class Device_Observed(Model):
     __table__ = "device_observed"
 
-    id = IntegerField(primary_key=True, default=next_id)
-    device_id = IntegerField()
-    user_id = IntegerField()
+    id = StringField(primary_key=True, ddl='varchar(32)', default=next_id)
+    device_id = StringField(ddl='varchar(32)')
+    user_id = StringField(ddl='varchar(32)')
 
     def observe(self, user_id, device_id):
         observed = self.find_first('where user_id = ? and device_id = ?', user_id, device_id)
@@ -31,10 +32,12 @@ class Device_Observed(Model):
 
 
     def observed_devices(self, user_id):
-        devices = self.find_by('where user_id = ?', user_id)
-        if devices:
-            return devices
-        return []
+        dev_ids = self.find_by('where user_id = ?', user_id)
+        devices = []
+        dev = Device()
+        for dev_id in dev_ids:
+            devices.append(dev.creator(dev_id.device_id))
+        return devices
 
     def count_user_devices(self, user_id):
         return self.count_by('where user_id = ?', user_id)

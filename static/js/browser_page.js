@@ -27,28 +27,18 @@ jQuery(function(){
     });
     $(".thumbnail").click(function(){
         $(".LayBg").height(document.body.clientWidth);
-        $(".LayImg").html($(this).find(".hidden").html());
+
+        $(".LayImg").html($(this).html());
+
         $(".LayBg").show();
         $(".LayBox").fadeIn(300);
-        var width = $(".LayImg").find('img').attr('image_width');
-        var height = $(".LayImg").find('img').attr('image_height');
-        if (height>480)
-        {
-            $(".LayBox").width(640);
-            $(".LayBox").height(480);
-            $(".LayImg img").width(640);
-            $(".LayImg img").height(480);
-        }
-        else
-        {
-            $(".LayBox").width(width);
-            $(".LayBox").height(height);
-            $(".LayImg img").width(width);
-            $(".LayImg img").height(height);
-        }
 
+        $(".LayBox").width(640);
+        $(".LayBox").height(480);
 
-        //alert(width)
+        $(".LayImg img").width(640);
+        $(".LayImg img").height(480);
+
     });
     var target = document.getElementsByClassName('LoadingImg');
     var spinner = new Spinner().spin(target[0]);

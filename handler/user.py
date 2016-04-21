@@ -56,6 +56,7 @@ class login_handler(base_handler):
                     username_warning = '用户名不能为空',
                     password_warning = '',
                     login_warning = '',
+                    user_name = "",
                     page_name = 'login')
         else:
             password = self.get_argument('password')
@@ -64,6 +65,7 @@ class login_handler(base_handler):
                         username_warning = '',
                         password_warning = '密码不能为空',
                         login_warning = '',
+                        user_name = "",
                         page_name = 'login')
             else:
                 res = task.user_login(username, password)
@@ -82,6 +84,7 @@ class login_handler(base_handler):
                     username_warning = '',
                     password_warning = '',
                     login_warning = '用户名或密码错误',
+                    user_name = "",
                     page_name = 'login')
 
 

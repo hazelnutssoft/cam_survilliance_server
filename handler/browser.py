@@ -29,11 +29,11 @@ class browser_handler(base_handler):
         else:
             current_page = 1
         if current_position_id:
-            current_position_id = int(current_position_id)
+            current_position_id = current_position_id
         else:
             # positions = position.get_position_by_device_id(devices[0].id)
             if positions:
-                current_position_id = int(positions[0].id)
+                current_position_id = positions[0].id
             else:
                 current_position_id = 0
         total_image_num = image.count_by_position_id(current_position_id)
@@ -73,5 +73,6 @@ class browser_handler(base_handler):
                            end_image_num=end_image_num,
                            start_page_num=start_page_num,
                            end_page_num=end_page_num,
+                           user_name=usr.name,
                            images=images
                            )

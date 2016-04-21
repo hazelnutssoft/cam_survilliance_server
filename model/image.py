@@ -7,10 +7,10 @@ import time,os
 class Image(Model):
     __table__ = 'image'
 
-    id = IntegerField(primary_key=True, default=next_id)
-    position_id = IntegerField()
+    id = StringField(primary_key=True, ddl='varchar(32)', default=next_id)
+    position_id = StringField(ddl='varchar(32)')
     path = StringField(ddl='varchar(200)')
-    created_at = FloatField(updatable=False, default=time.time)
+    created_at = FloatField(ddl='double', updatable=False, default=time.time)
 
     def validate(self):
         if os.path.exists(self.path):
@@ -18,11 +18,11 @@ class Image(Model):
         return False
 
     def create(self):
-        self.created_at = time.time()
-        if self.validate():
+        #self.created_at = time.time()
+        try:
             self.insert()
             return self.id
-        else:
+        except:
             return None
 
     def count_by_position_id(self, position_id):

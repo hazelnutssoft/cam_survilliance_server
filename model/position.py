@@ -10,8 +10,8 @@ from device import Device
 class Position(Model):
     __table__ = "position"
 
-    id = IntegerField(primary_key=True, default=next_id)
-    device_id = IntegerField()
+    id = StringField(primary_key=True, ddl='varchar(32)', default=next_id)
+    device_id = StringField(ddl='varchar(32)')
     position = IntegerField()
     object_name = StringField(ddl='varchar(50)')
     duration = IntegerField()
@@ -28,7 +28,9 @@ class Position(Model):
         if not self.validate():
             return
         pos = self.find_first('where device_id = ? and position = ?', self.device_id, self.position)
+
         if pos:
+            self.id = pos.id
             self.update()
         else:
             self.insert()

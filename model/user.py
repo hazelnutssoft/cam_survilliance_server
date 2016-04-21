@@ -10,7 +10,7 @@ from util import hash_password
 class User(Model):
     __table__ = 'user'
 
-    id = IntegerField(primary_key=True, default=next_id)
+    id = StringField(primary_key=True, ddl='varchar(32)', default=next_id)
     email = StringField(updatable=False, ddl='varchar(50)')
     password = StringField(ddl='varchar(50)')
     permission = IntegerField()
