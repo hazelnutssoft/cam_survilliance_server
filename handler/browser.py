@@ -29,6 +29,7 @@ class browser_handler(base_handler):
             current_page = int(current_page)
         else:
             current_page = 1
+            
         if current_position_id:
             current_position_id = current_position_id
         else:
