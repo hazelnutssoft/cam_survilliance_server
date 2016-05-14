@@ -62,6 +62,17 @@ def img_upload(device_mac, device_pos,created_at, meta):
         return False
     return True
 
+def img_upload_hik(device_mac, device_pos,created_at, filename):
+    img = Image()
+    img.path = filename
+    device_id = dev.get_device_by_mac(device_mac)
+    position_id = pos.get_position_id(device_id, device_pos)
+    img.create_at = created_at
+    img_id = img.create()
+    if not img_id:
+        return False
+    return True
+    
 # def make_thubnail(image_filename):
 #     origin_filepath = os.path.join(getPWDDir(), CAPTURED_DIR)
 #     origin_filepath = os.path.join(origin_filepath, image_filename)
